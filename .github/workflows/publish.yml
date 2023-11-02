@@ -2,7 +2,7 @@ name: Gradle Package
 
 on:
   release:
-    types: [ created ]
+    types: [ published ]
 
 jobs:
   build:
@@ -20,6 +20,12 @@ jobs:
           distribution: 'zulu'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - uses: pocket-apps/action-update-version@v1
+        with:
+          files: 'version.properties'
+          version-regexp: '\d+.\d+.\d+'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0

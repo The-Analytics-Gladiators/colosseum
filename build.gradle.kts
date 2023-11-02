@@ -95,6 +95,10 @@ publishing {
                 }
             }
         }
+        create<MavenPublication>("") {
+            from(components["kotlin"])
+//            artifact(sourceJar)
+        }
     }
 }
 
