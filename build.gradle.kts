@@ -9,7 +9,7 @@ plugins {
     id("com.google.protobuf") version "0.9.3"
     id("com.github.ben-manes.versions") version "0.47.0"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
-//    `maven-publish`
+    `maven-publish`
 }
 
 group = "io.gladiators"
@@ -83,24 +83,20 @@ val sourceJar by tasks.registering(Jar::class) {
 tasks.withType<Jar> { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
 
-//publishing {
-//    publications {
-//        repositories {
-//            maven {
-//                name = "GitHubPackages"
-//                url = uri("https://maven.pkg.github.com/The-Analytics-Gladiators/colosseum")
-//                credentials {
-//                    username = "The-Analytics-Gladiators"
-//                    password = System.getenv("GITHUB_TOKEN") ?: System.getenv("TOKEN") ?: file("githubtoken.secret").readText().trim()
-//                }
-//            }
-//        }
-//        create<MavenPublication>("gpr") {
-//            from(components["kotlin"])
-////            artifact(sourceJar)
-//        }
-//    }
-//}
+publishing {
+    publications {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/The-Analytics-Gladiators/colosseum")
+                credentials {
+                    username = "The-Analytics-Gladiators"
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
 
 protobuf {
     protoc {
