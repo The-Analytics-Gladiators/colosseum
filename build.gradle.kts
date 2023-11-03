@@ -95,7 +95,7 @@ publishing {
                 }
             }
         }
-        create<MavenPublication>("") {
+        create<MavenPublication>("colosseum-lib") {
             from(components["kotlin"])
 //            artifact(sourceJar)
         }
