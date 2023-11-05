@@ -91,7 +91,7 @@ publishing {
                 url = uri("https://maven.pkg.github.com/The-Analytics-Gladiators/colosseum")
                 credentials {
                     username = "The-Analytics-Gladiators"
-                    password = System.getenv("GITHUB_TOKEN")
+                    password = System.getenv("GITHUB_TOKEN") ?: System.getenv("TOKEN")
                 }
             }
         }
