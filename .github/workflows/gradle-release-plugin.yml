@@ -24,6 +24,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+
+      - name: Setup git config
+        run: |
+           git config user.name "GitHub Actions Bot"
+           git config user.email "juliya.insider@gmail.com"
+
       # Run release task
       - name: Release with Gradle Release Plugin
         run: ./gradlew release -Prelease.useAutomaticVersion=true -x preTagCommit -x createReleaseTag
