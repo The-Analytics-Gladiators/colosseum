@@ -10,7 +10,7 @@ jobs:
     name: Release New Version
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
 
