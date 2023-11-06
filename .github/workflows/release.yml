@@ -29,3 +29,6 @@ jobs:
       # Run release task
       - name: Release with Gradle Release Plugin
         run: ./gradlew release
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
