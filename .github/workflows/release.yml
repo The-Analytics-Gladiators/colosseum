@@ -5,13 +5,9 @@ name: Create release
 on:
   workflow_dispatch:
 
-# Allow GitHub Actions to push changes to the repository
-permissions:
-  contents: write
-
 jobs:
   release:
-    name: Release
+    name: Release New Version
     runs-on: ubuntu-latest
     permissions:
       contents: read
