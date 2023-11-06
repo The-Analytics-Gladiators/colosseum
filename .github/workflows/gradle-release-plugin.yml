@@ -31,4 +31,4 @@ jobs:
 
       # Run release task
       - name: Release with Gradle Release Plugin
-        run: ./gradlew release -Prelease.useAutomaticVersion=true -x preTagCommit -x createReleaseTag
+        run: ./gradlew release -Prelease.useLastTag=true -x preTagCommit -x createReleaseTag
