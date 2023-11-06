@@ -73,6 +73,12 @@ val sourceJar by tasks.registering(Jar::class) {
 
 tasks.withType<Jar> { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
+tasks {
+    afterReleaseBuild {
+        dependsOn("publish")
+    }
+}
+
 
 publishing {
     publications {
@@ -102,7 +108,6 @@ configure<ReleaseExtension> {
     }
 }
 
-//release {
 //    failOnCommitNeeded = true
 //    failOnPublishNeeded = true
 //    failOnSnapshotDependencies = true
