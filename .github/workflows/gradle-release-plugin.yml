@@ -1,0 +1,29 @@
+name: Create release
+
+# Controls when the action will run
+# Option bellow allows you to run the workflow manually
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release new version'
+
+# Allow GitHub Actions to push changes to the repository
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      # Run release task
+      - name: Release with Gradle Release Plugin
+        run: ./gradlew release -Prelease.useAutomaticVersion=true -x preTagCommit -x createReleaseTag

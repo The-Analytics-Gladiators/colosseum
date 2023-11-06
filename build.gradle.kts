@@ -1,6 +1,7 @@
 import com.google.protobuf.gradle.id
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import net.researchgate.release.ReleaseExtension
 import java.util.*
 
 plugins {
@@ -9,15 +10,12 @@ plugins {
     id("com.google.protobuf") version "0.9.3"
     id("com.github.ben-manes.versions") version "0.47.0"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
+    id("net.researchgate.release").version("3.0.2")
     `maven-publish`
 }
 
 group = "io.gladiators"
-version = Properties().apply {
-    file("version.properties").inputStream().use { input ->
-        load(input)
-    }
-}.getProperty("version")
+version = 2.0
 
 repositories {
     mavenCentral()
@@ -26,31 +24,25 @@ repositories {
 
 dependencies {
     api("org.web3j:core:4.10.2")
-
     api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3")
     api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-
     api("org.rocksdb:rocksdbjni:8.3.2")
     api("redis.clients:jedis:4.4.0")
     api("io.arrow-kt:arrow-core:1.2.0")
     api("io.arrow-kt:arrow-fx-coroutines:1.2.0")
     api("com.esaulpaugh:headlong:9.4.0")
     api("com.github.goodforgod:java-etherscan-api:2.1.0")
-
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.2")
-
     api("com.clickhouse:clickhouse-jdbc:0.4.6")
     api("com.clickhouse:clickhouse-http-client:0.4.6")
-
     api("io.grpc:grpc-kotlin-stub:1.3.0")
     api("io.grpc:grpc-protobuf:1.57.2")
     api("com.google.protobuf:protobuf-kotlin:3.23.4")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("io.github.oshai:kotlin-logging-jvm:5.0.1")
-
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.reflections:reflections:0.10.2")
 
@@ -102,11 +94,41 @@ publishing {
     }
 }
 
+apply(plugin = "base")
+apply(plugin = "net.researchgate.release")
+
+configure<ReleaseExtension> {
+    ignoredSnapshotDependencies = listOf("net.researchgate:gradle-release")
+    failOnPublishNeeded = true
+    with(git) {
+        requireBranch = "main"
+        // to disable branch verification: requireBranch.set(null as String?)
+    }
+}
+
+//release {
+//    failOnCommitNeeded = true
+//    failOnPublishNeeded = true
+//    failOnSnapshotDependencies = true
+//    failOnUnversionedFiles = true
+//    failOnUpdateNeeded = true
+//    preTagCommitMessage = "[Gradle Release Plugin] - pre tag commit: "
+//    tagCommitMessage = "[Gradle Release Plugin] - creating tag: "
+//    newVersionCommitMessage = "[Gradle Release Plugin] - new version commit: "
+//    tagTemplate = "$version"
+//    versionPropertyFile = "gradle.properties"
+//    snapshotSuffix = "-SNAPSHOT"
+//    buildTasks = []
+//
+//    git {
+//        requireBranch.set("main")
+//    }
+//}
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.23.4"
     }
-
     plugins {
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:1.56.1"
