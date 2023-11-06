@@ -15,7 +15,6 @@ plugins {
 }
 
 group = "io.gladiators"
-version = 2.0
 
 repositories {
     mavenCentral()
@@ -93,9 +92,6 @@ publishing {
         }
     }
 }
-
-apply(plugin = "base")
-apply(plugin = "net.researchgate.release")
 
 configure<ReleaseExtension> {
     ignoredSnapshotDependencies = listOf("net.researchgate:gradle-release")
