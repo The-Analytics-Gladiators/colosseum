@@ -4,9 +4,6 @@ name: Create release
 # Option bellow allows you to run the workflow manually
 on:
   workflow_dispatch:
-    inputs:
-      release_version:
-        description: 'Release new version'
 
 # Allow GitHub Actions to push changes to the repository
 permissions:
@@ -31,4 +28,4 @@ jobs:
 
       # Run release task
       - name: Release with Gradle Release Plugin
-        run: ./gradlew release -Prelease.useLastTag=true -x preTagCommit -x createReleaseTag
+        run: ./gradlew release
