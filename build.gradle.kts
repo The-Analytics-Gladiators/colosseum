@@ -2,7 +2,6 @@ import com.google.protobuf.gradle.id
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import net.researchgate.release.ReleaseExtension
-import java.util.*
 
 plugins {
     kotlin("jvm") version "1.9.0"

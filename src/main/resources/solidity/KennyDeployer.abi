@@ -1,0 +1,101 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "from",
+				"type": "uint32"
+			},
+			{
+				"internalType": "uint32",
+				"name": "to",
+				"type": "uint32"
+			}
+		],
+		"name": "deploy",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint64",
+				"name": "salt",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "size",
+				"type": "uint64"
+			}
+		],
+		"name": "kill",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint64",
+				"name": "from",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "to",
+				"type": "uint64"
+			}
+		],
+		"name": "firstAliveKenny",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "blockNumber",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "kennyAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "salt",
+				"type": "uint256"
+			}
+		],
+		"name": "isKennyAlive",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "blockNumber",
+				"type": "uint128"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "address",
+				"name": "kennyAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
