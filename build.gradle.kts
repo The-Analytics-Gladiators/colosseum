@@ -107,24 +107,6 @@ configure<ReleaseExtension> {
     }
 }
 
-//    failOnCommitNeeded = true
-//    failOnPublishNeeded = true
-//    failOnSnapshotDependencies = true
-//    failOnUnversionedFiles = true
-//    failOnUpdateNeeded = true
-//    preTagCommitMessage = "[Gradle Release Plugin] - pre tag commit: "
-//    tagCommitMessage = "[Gradle Release Plugin] - creating tag: "
-//    newVersionCommitMessage = "[Gradle Release Plugin] - new version commit: "
-//    tagTemplate = "$version"
-//    versionPropertyFile = "gradle.properties"
-//    snapshotSuffix = "-SNAPSHOT"
-//    buildTasks = []
-//
-//    git {
-//        requireBranch.set("main")
-//    }
-//}
-
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.23.4"
