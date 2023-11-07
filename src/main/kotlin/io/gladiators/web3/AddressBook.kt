@@ -1,6 +1,6 @@
 package io.gladiators.web3
 
-sealed interface AddressBook {
+interface AddressBook {
     fun uniswap(): UniswapAddressBook = UniswapAddressBook()
     fun multicall(): String = "0xcA11bde05977b3631167028862bE2a173976CA11"
 }
