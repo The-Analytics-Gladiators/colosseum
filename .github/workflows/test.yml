@@ -30,4 +30,6 @@ jobs:
           java-version: 17
       
       - name: Gradle Build
+        env:
+          WEB3_NODES: ${{ secrets.WEB3_NODES }}
         uses: gradle/gradle-build-action@v2.9.0
