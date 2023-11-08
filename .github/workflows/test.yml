@@ -29,9 +29,9 @@ jobs:
           distribution: temurin
           java-version: 17
       
-      - name: Gradle Build
-        env:
-          WEB3_NODES: ${{ secrets.WEB3_NODES }}
+      - name: Prepare build
         uses: gradle/gradle-build-action@v2.9.0
       - name: Execute Gradle build
+        env:
+          WEB3_NODES: ${{ secrets.WEB3_NODES }}
         run: ./gradlew build
