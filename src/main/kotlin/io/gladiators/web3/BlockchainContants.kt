@@ -7,33 +7,45 @@ import java.math.BigInteger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+enum class Chain(val id: Int) {
+    ETH(1),
+    BSC(56),
+    POLYGON(137),
+    OPTIMIZMIZM(10),
+    HARDHAT(31337)
+}
+data class BlockchainConstants(
+    val blockDuration: Duration,
+    val minGasPrice: BigInteger,
+    val chain: Chain,
+    val nativeTokenWrapper: Address
+)
 
-data class BinanceBlockchain(
-    override val blockDuration: Duration = 3.seconds,
-    override val minGasPrice: BigInteger = BigInteger("3000000000"),
-    override val chain: Chain = Chain.BSC,
-    override val nativeTokenWrapper: Address = BnbTokens.Wbnb.address,
-) : Blockchain
-
-data class PolygonBlockchain(
-    override val blockDuration: Duration = 2.seconds,
-    override val minGasPrice: BigInteger = BigInteger("210000000000"),
-    override val chain: Chain = Chain.POLYGON,
-    override val nativeTokenWrapper: Address = MaticTokens.Wmatic.address,
-) : Blockchain
-
-data class ETHBlockchain(
-        override val blockDuration: Duration = 14.seconds,
-        override val minGasPrice: BigInteger = BigInteger("30000000000"),
-        override val chain: Chain = Chain.ETH,
-        override val nativeTokenWrapper: Address = Address("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
-) : Blockchain
-
-
-data class OptimismBlockchain(
-    override val blockDuration: Duration = 2.seconds,
-    override val minGasPrice: BigInteger = BigInteger("1000000"),
-    override val chain: Chain = Chain.OPTIMIZMIZM,
-    override val nativeTokenWrapper: Address = Address("0xtodo"),
-) : Blockchain
-
+fun constantsForChain(chain: Chain): BlockchainConstants =
+    when (chain) {
+        Chain.ETH -> BlockchainConstants(
+            blockDuration = 14.seconds,
+            minGasPrice = BigInteger("3000000000"),
+            chain = Chain.ETH,
+            nativeTokenWrapper = Address("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
+        )
+        Chain.BSC -> BlockchainConstants(
+            blockDuration = 3.seconds,
+            minGasPrice = BigInteger("3000000000"),
+            chain = Chain.BSC,
+            nativeTokenWrapper = BnbTokens.Wbnb.address
+        )
+        Chain.POLYGON -> BlockchainConstants(
+            blockDuration = 2.seconds,
+            minGasPrice = BigInteger("210000000000"),
+            chain = Chain.POLYGON,
+            nativeTokenWrapper = MaticTokens.Wmatic.address
+        )
+        Chain.OPTIMIZMIZM -> throw IllegalArgumentException("todo") // todo
+        Chain.HARDHAT -> BlockchainConstants(
+            blockDuration = 1.seconds,
+            minGasPrice = BigInteger("1000000000"),
+            chain = Chain.HARDHAT,
+            nativeTokenWrapper = BnbTokens.Wbnb.address
+        )
+    }
