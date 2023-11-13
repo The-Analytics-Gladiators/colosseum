@@ -38,5 +38,20 @@ object Web3NodesRepo {
             ?.let {
                 PolygonNode(it.name, it.url, chain = Chain.ETH)
             }!!
+
+    val HardHatBinance = HardhatNode(BinanceNode(
+        name = "HardHat Binance",
+        url = "http://127.0.0.1:8545/"
+    ))
+
+    val HardHatPolygon = HardhatNode(PolygonNode(
+        name = "HardHat Polygon",
+        url = "http://127.0.0.1:8545/"
+    ))
+    val HardHatEth = HardhatNode(EthNode(
+        name = "HardHat ETH",
+        url = "http://127.0.0.1:8545/"
+    ))
+
 }
 

@@ -14,6 +14,7 @@ enum class Chain(val id: Int) {
     OPTIMIZMIZM(10),
     HARDHAT(31337)
 }
+
 data class BlockchainConstants(
     val blockDuration: Duration,
     val minGasPrice: BigInteger,

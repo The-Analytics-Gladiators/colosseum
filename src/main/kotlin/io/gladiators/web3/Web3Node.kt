@@ -1,7 +1,5 @@
 package io.gladiators.web3
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import org.web3j.crypto.Credentials
 import org.web3j.protocol.Web3j
@@ -10,8 +8,6 @@ import org.web3j.protocol.websocket.WebSocketService
 import org.web3j.tx.gas.StaticEIP1559GasProvider
 import org.web3j.utils.Async
 import java.math.BigInteger
-import kotlin.reflect.KClass
-
 
 
 interface Web3Node<T: Web3Context> {
@@ -21,7 +17,7 @@ interface Web3Node<T: Web3Context> {
     fun buildContext(web3j: Web3j, credentials: Credentials, constants: BlockchainConstants = constantsForChain(chain),
                      gasPrice: BigInteger = constants.minGasPrice, gasLimit: BigInteger = BigInteger("3000000")): T
     companion object {
-        fun <T: Web3Context> Web3Node<T>.createWeb3(httpClient: OkHttpClient, pollingInterval: Long = 3000L): Web3j =
+        fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L): Web3j =
             if (url.startsWith("http")) {
                 Web3j.build(HttpService(url, httpClient), pollingInterval, Async.defaultExecutorService())
             } else {
@@ -38,7 +34,7 @@ data class EthNode(override val name: String, override val url: String, override
         constants: BlockchainConstants,
         gasPrice: BigInteger,
         gasLimit: BigInteger,
-    ): ETHContext = ETHContext(
+    ): ETHContext = ETHContextContainer(
             web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 data class BinanceNode(override val name: String, override val url: String, override val chain: Chain = Chain.BSC): Web3Node<BinanceContext> {
@@ -48,7 +44,7 @@ data class BinanceNode(override val name: String, override val url: String, over
         constants: BlockchainConstants,
         gasPrice: BigInteger,
         gasLimit: BigInteger,
-    ): BinanceContext = BinanceContext(
+    ): BinanceContext = BinanceContextContainer(
             web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 
@@ -59,7 +55,7 @@ data class PolygonNode(override val name: String, override val url: String, over
         constants: BlockchainConstants,
         gasPrice: BigInteger,
         gasLimit: BigInteger,
-    ): PolygonContext = PolygonContext(
+    ): PolygonContext = PolygonContextContainer(
             web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 
@@ -70,7 +66,7 @@ data class OptimismNode(override val name: String, override val url: String, ove
         constants: BlockchainConstants,
         gasPrice: BigInteger,
         gasLimit: BigInteger,
-    ): OptimismContext = OptimismContext(
+    ): OptimismContext = OptimismContextContainer(
         web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 
