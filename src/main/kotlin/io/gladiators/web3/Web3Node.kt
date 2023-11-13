@@ -27,14 +27,14 @@ interface Web3Node<T: Web3Context> {
             }
     }
 }
-data class EthNode(override val name: String, override val url: String, override val chain: Chain = Chain.ETH): Web3Node<ETHContext> {
+data class EthNode(override val name: String, override val url: String, override val chain: Chain = Chain.ETH): Web3Node<EthereumContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
         constants: BlockchainConstants,
         gasPrice: BigInteger,
         gasLimit: BigInteger,
-    ): ETHContext = ETHContextContainer(
+    ): EthereumContext = ETHContextContainer(
             web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 data class BinanceNode(override val name: String, override val url: String, override val chain: Chain = Chain.BSC): Web3Node<BinanceContext> {
