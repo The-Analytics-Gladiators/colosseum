@@ -5,8 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import io.gladiators.chain.BnbTokens
 import io.gladiators.chain.erc20
 import io.gladiators.solidity.Erc20
-import io.gladiators.web3.Chain
-import io.gladiators.web3.Web3Context
+import io.gladiators.web3.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.web3j.abi.datatypes.Address
@@ -53,7 +52,13 @@ private fun chainToGeckoName(context: Web3Context): String = when(context.blockc
     Chain.BSC -> "binance-smart-chain"
     Chain.OPTIMIZMIZM -> "optimistic-ethereum"
     Chain.ETH -> "ethereum"
-    else -> throw IllegalArgumentException("UnknownWeb context")
+    Chain.HARDHAT -> when(context) {
+        is BinanceContext -> "binance-smart-chain"
+        is PolygonContext -> "polygon-pos"
+        is OptimismContext -> "optimistic-ethereum"
+        is EthereumContext -> "ethereum"
+        else -> throw IllegalArgumentException("No cex quote for $context")
+    }
 }
 
 private val decimalsCache = Caffeine.newBuilder()

@@ -61,14 +61,14 @@ data class UnknownWeb3Context(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : Web3Context
 
-interface ETHContext: Web3Context
+interface EthereumContext: Web3Context
 
 data class ETHContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.ETH),
     override val addressBook: AddressBook = DefaultAddressBook
-) : ETHContext
+) : EthereumContext
 
 interface OptimismContext: Web3Context
 
