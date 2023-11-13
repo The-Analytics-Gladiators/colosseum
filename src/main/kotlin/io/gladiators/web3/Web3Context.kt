@@ -19,6 +19,7 @@ value class WalletAccount(val accountSeed: Int) {
     companion object {
         val primary = WalletAccount(0)
         val secondary = WalletAccount(1)
+        val canary = WalletAccount(2)
         val readonly = WalletAccount(-1)
         val hardhat =  WalletAccount(-2)
         val hardhat2 =  WalletAccount(-3)
@@ -60,33 +61,39 @@ data class UnknownWeb3Context(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : Web3Context
 
-data class ETHContext(
+interface ETHContext: Web3Context
+
+data class ETHContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.ETH),
     override val addressBook: AddressBook = DefaultAddressBook
-) : Web3Context
+) : ETHContext
 
-data class OptimismContext(
+interface OptimismContext: Web3Context
+
+data class OptimismContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.OPTIMIZMIZM),
     override val addressBook: AddressBook = DefaultAddressBook
-) : Web3Context
+) : OptimismContext
 
-data class PolygonContext(
+interface PolygonContext: Web3Context
+data class PolygonContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.POLYGON),
     override val addressBook: AddressBook = DefaultAddressBook
-) : Web3Context
+) : PolygonContext
 
-data class BinanceContext(
+interface BinanceContext: Web3Context
+data class BinanceContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.BSC),
     override val addressBook: AddressBook = DefaultAddressBook
-) : Web3Context
+) : BinanceContext
 fun <T> withWeb3Context(
     web3j: Web3j,
     constants: BlockchainConstants,
@@ -108,7 +115,7 @@ fun <T, K : Web3Context> withWeb3Context(
     httpClient: OkHttpClient = fastPaceHttp,
     function: K.() -> T
 ): T {
-    val web3j = web3Node.createWeb3(httpClient)
+    val web3j = createWeb3(web3Node.url, httpClient)
     val context = if(gas.price == BigInteger.ZERO) {
         web3Node.buildContext(web3j, credentials)
     } else {
