@@ -28,7 +28,7 @@ object Web3NodesRepo {
             }!!
 
     fun optimism(name: String): OptimismNode =
-        nodes.find { it.chain.equals(Chain.OPTIMIZMIZM.name, ignoreCase = true) && name.equals(it.name, ignoreCase = true) }
+        nodes.find { it.chain.equals(Chain.OPTIMISM.name, ignoreCase = true) && name.equals(it.name, ignoreCase = true) }
             ?.let {
                 OptimismNode(it.name, it.url, chain = Chain.ETH)
             }!!

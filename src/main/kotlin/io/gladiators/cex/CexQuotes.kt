@@ -50,7 +50,8 @@ private val priceCache = Caffeine.newBuilder()
 private fun chainToGeckoName(context: Web3Context): String = when(context.blockchainConstants.chain) {
     Chain.POLYGON -> "polygon-pos"
     Chain.BSC -> "binance-smart-chain"
-    Chain.OPTIMIZMIZM -> "optimistic-ethereum"
+    Chain.OPTIMISM -> "optimistic-ethereum"
+    Chain.ARBITRUM_ONE -> "arbitrum-one"
     Chain.ETH -> "ethereum"
     Chain.HARDHAT -> when(context) {
         is BinanceContext -> "binance-smart-chain"

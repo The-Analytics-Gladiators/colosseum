@@ -38,7 +38,7 @@ fun <T> Flow<T>.timeWindow(interval: Duration, size: Int): Flow<List<T>> = chann
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-fun <T> Flow<T>.batched(size: Int): Flow<List<T>> = channelFlow<List<T>> {
+fun <T> Flow<T>.batched(size: Int): Flow<List<T>> = channelFlow {
     val queue = ArrayBlockingQueue<T>(size)
     launch {
         collect { value ->

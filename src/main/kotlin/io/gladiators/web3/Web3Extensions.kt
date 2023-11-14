@@ -62,7 +62,9 @@ fun Web3Context.isNodeLagging(latestBlockEtherscan: BigInteger, allowedLag: Int)
         // smoketest
         val latestBlockObj = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send()
         val diff = latestBlockEtherscan - latestBlockNumber
-        if (diff > allowedLag.toBigInteger() && web3j.ethGetLogs(EthFilter(latestBlockObj.block.hash)).send().logs.isNotEmpty()) {
+        val isSyncing = web3j.ethSyncing().send().isSyncing
+        val lastBlockLogs = web3j.ethGetLogs(EthFilter(latestBlockObj.block.hash)).send().logs
+        if (diff > allowedLag.toBigInteger() || lastBlockLogs.isEmpty() || isSyncing) {
             null
         } else {
             latestBlockNumber
