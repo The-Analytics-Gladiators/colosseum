@@ -151,7 +151,7 @@ fun <T, K : Web3Context> withReadonlyWeb3Context(
 }
 
 fun resolveWallet(file: String = "/secrets/metamask.secret"): String = try {
-    System.getenv()["WALLET"] ?: object {}.javaClass.getResourceAsStream(file)!!.bufferedReader().readText().trim()
+    System.getenv("WALLET") ?: object {}.javaClass.getResourceAsStream(file)!!.bufferedReader().readText().trim()
 } catch (ex: NullPointerException) {
     throw IllegalArgumentException("Wallet file not found")
 }
