@@ -135,7 +135,7 @@ fun <T, K : Web3Context> withWeb3Context(
     gasLimit: BigInteger = BigInteger("600000"),
     httpClient: OkHttpClient = fastPaceHttp,
     function: K.() -> T
-): T = withWeb3Context(web3Node, account, gasPrice, gasLimit, httpClient, function)
+): T = withWeb3Context(web3Node, loadCredentials(account, resolveWallet()), Gas(gasPrice ?: constantsForChain(web3Node.chain).minGasPrice, gasLimit), httpClient, function)
 
 fun <T, K : Web3Context> withReadonlyWeb3Context(
     web3Node: Web3Node<K>,
