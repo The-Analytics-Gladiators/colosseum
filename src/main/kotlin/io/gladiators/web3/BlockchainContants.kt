@@ -3,6 +3,7 @@ package io.gladiators.web3
 import io.gladiators.chain.BnbTokens
 import io.gladiators.chain.MaticTokens
 import org.web3j.abi.datatypes.Address
+import org.web3j.utils.Convert
 import java.math.BigInteger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -11,7 +12,8 @@ enum class Chain(val id: Int) {
     ETH(1),
     BSC(56),
     POLYGON(137),
-    OPTIMIZMIZM(10),
+    OPTIMISM(10),
+    ARBITRUM_ONE(42161),
     HARDHAT(31337)
 }
 
@@ -42,7 +44,18 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
             chain = Chain.POLYGON,
             nativeTokenWrapper = MaticTokens.Wmatic.address
         )
-        Chain.OPTIMIZMIZM -> throw IllegalArgumentException("todo") // todo
+        Chain.OPTIMISM -> BlockchainConstants(
+            blockDuration = 2.seconds,
+            minGasPrice = Convert.toWei("0.011", Convert.Unit.GWEI).toBigInteger(),
+            chain = Chain.OPTIMISM,
+            nativeTokenWrapper = Address("0x4200000000000000000000000000000000000042")
+        )
+        Chain.ARBITRUM_ONE -> BlockchainConstants(
+            blockDuration = 0.3.seconds,
+            minGasPrice = Convert.toWei("0.3", Convert.Unit.GWEI).toBigInteger(),
+            chain = Chain.ARBITRUM_ONE,
+            nativeTokenWrapper = Address("0x912CE59144191C1204E64559FE8253a0e49E6548")
+        )
         Chain.HARDHAT -> BlockchainConstants(
             blockDuration = 1.seconds,
             minGasPrice = BigInteger("1000000000"),

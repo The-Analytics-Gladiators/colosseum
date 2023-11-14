@@ -59,7 +59,7 @@ data class PolygonNode(override val name: String, override val url: String, over
             web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 
-data class OptimismNode(override val name: String, override val url: String, override val chain: Chain = Chain.OPTIMIZMIZM): Web3Node<OptimismContext> {
+data class OptimismNode(override val name: String, override val url: String, override val chain: Chain = Chain.OPTIMISM): Web3Node<OptimismContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -70,6 +70,16 @@ data class OptimismNode(override val name: String, override val url: String, ove
         web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
 }
 
+data class ArbitrumNode(override val name: String, override val url: String, override val chain: Chain = Chain.ARBITRUM_ONE): Web3Node<ArbitrumContext> {
+    override fun buildContext(
+        web3j: Web3j,
+        credentials: Credentials,
+        constants: BlockchainConstants,
+        gasPrice: BigInteger,
+        gasLimit: BigInteger,
+    ): ArbitrumContext = ArbitrumContextContainer(
+        web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+}
 data class HardhatNode<out K: Web3Node<T>, T: Web3Context>(val delegate: K): Web3Node<T> by delegate {
     override fun buildContext(
         web3j: Web3j,

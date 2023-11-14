@@ -9,7 +9,7 @@ import org.web3j.crypto.MnemonicUtils
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.Web3j
 import org.web3j.tx.gas.ContractGasProvider
-import org.web3j.tx.gas.StaticEIP1559GasProvider
+import org.web3j.tx.gas.StaticGasProvider
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
@@ -75,7 +75,7 @@ interface OptimismContext: Web3Context
 data class OptimismContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
-    override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.OPTIMIZMIZM),
+    override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.OPTIMISM),
     override val addressBook: AddressBook = DefaultAddressBook
 ) : OptimismContext
 
@@ -94,6 +94,13 @@ data class BinanceContextContainer(
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.BSC),
     override val addressBook: AddressBook = DefaultAddressBook
 ) : BinanceContext
+interface ArbitrumContext: Web3Context
+data class ArbitrumContextContainer(
+    override val web3j: Web3j,
+    override val web3Defaults: Web3Defaults,
+    override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.BSC),
+    override val addressBook: AddressBook = DefaultAddressBook
+) : ArbitrumContext
 fun <T> withWeb3Context(
     web3j: Web3j,
     constants: BlockchainConstants,
@@ -103,11 +110,8 @@ fun <T> withWeb3Context(
     gasLimit: BigInteger = BigInteger("400000"),
     function: Web3Context.() -> T
 ): T = UnknownWeb3Context(web3j, Web3Defaults(credentials,
-        StaticEIP1559GasProvider(
-            constants.chain.id.toLong(),
-            gasPrice,
-            gasPrice,
-            gasLimit)), constants).let(function)
+    StaticGasProvider(gasPrice, gasLimit)
+), constants).let(function)
 fun <T, K : Web3Context> withWeb3Context(
     web3Node: Web3Node<K>,
     credentials: Credentials,
