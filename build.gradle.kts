@@ -18,6 +18,8 @@ repositories {
     mavenLocal()
 }
 
+val ktorVersion = "2.3.6"
+
 dependencies {
     api("org.web3j:core:4.10.3")
     api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1")
@@ -26,6 +28,10 @@ dependencies {
     api("com.esaulpaugh:headlong:9.4.0")
     api("com.github.goodforgod:java-etherscan-api:2.1.0")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
