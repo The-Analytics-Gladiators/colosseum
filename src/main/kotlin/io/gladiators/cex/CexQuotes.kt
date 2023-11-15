@@ -1,49 +1,57 @@
 package io.gladiators.cex
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.benmanes.caffeine.cache.Caffeine
 import io.gladiators.chain.BnbTokens
 import io.gladiators.chain.erc20
 import io.gladiators.solidity.Erc20
 import io.gladiators.web3.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.runBlocking
 import org.web3j.abi.datatypes.Address
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
 import java.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 private data class TokenCacheId(val blockchain: String, val address: String)
+
 
 private val priceCache = Caffeine.newBuilder()
     .expireAfterWrite(Duration.ofHours(1))
     .maximumSize(1000)
     .build<TokenCacheId, Double> { key ->
-        val httpClient: OkHttpClient = OkHttpClient.Builder()
-            .callTimeout(Duration.ofSeconds(5))
-            .connectTimeout(Duration.ofSeconds(5))
-            .readTimeout(Duration.ofSeconds(5))
-            .writeTimeout(Duration.ofSeconds(5))
-            .build()
+        val client = HttpClient(CIO) {
+            followRedirects = true
+            expectSuccess = true
+            install(HttpTimeout) {
+                connectTimeoutMillis = 1.seconds.inWholeMilliseconds
+                requestTimeoutMillis = 2.seconds.inWholeMilliseconds
+                socketTimeoutMillis = 1.seconds.inWholeMilliseconds
+            }
+            install(ContentNegotiation) {
+                json()
+            }
+        }
         val chain = key.blockchain
         val address = key.address
-        val response = httpClient.newCall(
-            Request.Builder()
-                .url("""https://api.coingecko.com/api/v3/simple/token_price/$chain?contract_addresses=${address}&vs_currencies=usd""".trimMargin())
-                .header("accept", "application/json")
-                .build()
-        ).execute()
-        require(response.isSuccessful)
-        val body = response.body!!.string()
-        httpClient.connectionPool.evictAll()
-        try {
-            val price = ObjectMapper().readTree(body)[address]["usd"].asDouble()
-            require(price > 0)
-            price
-        } catch (ex: Exception){
-          throw IllegalArgumentException("No cex quote for $address", ex)
+        runBlocking {
+            val response = client.get("""https://api.coingecko.com/api/v3/simple/token_price/$chain?contract_addresses=${address}&vs_currencies=usd""".trimMargin()) {
+                header("accept", "application/json")
+            }
+            require(response.status.isSuccess()) { "coingecko request failed ${response.body<String>()}" }
+            val resp: Map<String, Map<String, Double>> = response.body()
+            resp[address]!!["usd"]!!.apply { require(this > 0) }
+        }.apply {
+            client.close()
         }
     }
 
