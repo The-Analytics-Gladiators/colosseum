@@ -19,6 +19,7 @@ repositories {
 }
 
 val ktorVersion = "2.3.6"
+val resilience4jVersion = "2.1.0"
 
 dependencies {
     api("org.web3j:core:4.10.3")
@@ -40,9 +41,12 @@ dependencies {
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.kotest:kotest-runner-junit5:5.6.1")
-    testImplementation("io.kotest:kotest-property:5.6.1")
-    testImplementation("io.kotest:kotest-framework-datatest:5.6.1")
+    testImplementation("io.github.resilience4j:resilience4j-kotlin:${resilience4jVersion}")
+    testImplementation("io.github.resilience4j:resilience4j-retry:${resilience4jVersion}")
+    testImplementation("io.github.resilience4j:resilience4j-ratelimiter:${resilience4jVersion}")
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    testImplementation("io.kotest:kotest-property:5.8.0")
+    testImplementation("io.kotest:kotest-framework-datatest:5.8.0")
 
 }
 
