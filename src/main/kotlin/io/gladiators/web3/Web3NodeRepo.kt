@@ -21,6 +21,7 @@ object Web3NodesRepo {
             ?.let {
                 EthNode(it.name, it.url, chain = Chain.ETH)
             }!!
+
     fun binance(name: String): BinanceNode =
         nodes.find { it.chain.equals(Chain.BSC.name, ignoreCase = true) && name.equals(it.name, ignoreCase = true) }
             ?.let {
@@ -28,7 +29,12 @@ object Web3NodesRepo {
             }!!
 
     fun optimism(name: String): OptimismNode =
-        nodes.find { it.chain.equals(Chain.OPTIMISM.name, ignoreCase = true) && name.equals(it.name, ignoreCase = true) }
+        nodes.find {
+            it.chain.equals(Chain.OPTIMISM.name, ignoreCase = true) && name.equals(
+                it.name,
+                ignoreCase = true
+            )
+        }
             ?.let {
                 OptimismNode(it.name, it.url, chain = Chain.ETH)
             }!!
@@ -39,19 +45,25 @@ object Web3NodesRepo {
                 PolygonNode(it.name, it.url, chain = Chain.ETH)
             }!!
 
-    val HardHatBinance = HardhatNode(BinanceNode(
-        name = "HardHat Binance",
-        url = "http://127.0.0.1:8545/"
-    ))
+    val HardHatBinance = HardhatNode(
+        BinanceNode(
+            name = "HardHat Binance",
+            url = "http://127.0.0.1:8545/"
+        )
+    )
 
-    val HardHatPolygon = HardhatNode(PolygonNode(
-        name = "HardHat Polygon",
-        url = "http://127.0.0.1:8545/"
-    ))
-    val HardHatEth = HardhatNode(EthNode(
-        name = "HardHat ETH",
-        url = "http://127.0.0.1:8545/"
-    ))
+    val HardHatPolygon = HardhatNode(
+        PolygonNode(
+            name = "HardHat Polygon",
+            url = "http://127.0.0.1:8545/"
+        )
+    )
+    val HardHatEth = HardhatNode(
+        EthNode(
+            name = "HardHat ETH",
+            url = "http://127.0.0.1:8545/"
+        )
+    )
 
 }
 

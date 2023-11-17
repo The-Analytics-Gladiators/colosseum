@@ -21,9 +21,9 @@ value class WalletAccount(val accountSeed: Int) {
         val secondary = WalletAccount(1)
         val canary = WalletAccount(2)
         val readonly = WalletAccount(-1)
-        val hardhat =  WalletAccount(-2)
-        val hardhat2 =  WalletAccount(-3)
-        val hardhat3 =  WalletAccount(-4)
+        val hardhat = WalletAccount(-2)
+        val hardhat2 = WalletAccount(-3)
+        val hardhat3 = WalletAccount(-4)
     }
 }
 
@@ -54,6 +54,7 @@ interface Web3Context {
     val blockchainConstants: BlockchainConstants
     val addressBook: AddressBook
 }
+
 data class UnknownWeb3Context(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
@@ -61,7 +62,7 @@ data class UnknownWeb3Context(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : Web3Context
 
-interface EthereumContext: Web3Context
+interface EthereumContext : Web3Context
 
 data class ETHContextContainer(
     override val web3j: Web3j,
@@ -70,7 +71,7 @@ data class ETHContextContainer(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : EthereumContext
 
-interface OptimismContext: Web3Context
+interface OptimismContext : Web3Context
 
 data class OptimismContextContainer(
     override val web3j: Web3j,
@@ -79,7 +80,7 @@ data class OptimismContextContainer(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : OptimismContext
 
-interface PolygonContext: Web3Context
+interface PolygonContext : Web3Context
 data class PolygonContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
@@ -87,20 +88,22 @@ data class PolygonContextContainer(
     override val addressBook: AddressBook = DefaultAddressBook
 ) : PolygonContext
 
-interface BinanceContext: Web3Context
+interface BinanceContext : Web3Context
 data class BinanceContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.BSC),
     override val addressBook: AddressBook = DefaultAddressBook
 ) : BinanceContext
-interface ArbitrumContext: Web3Context
+
+interface ArbitrumContext : Web3Context
 data class ArbitrumContextContainer(
     override val web3j: Web3j,
     override val web3Defaults: Web3Defaults,
     override val blockchainConstants: BlockchainConstants = constantsForChain(Chain.BSC),
     override val addressBook: AddressBook = DefaultAddressBook
 ) : ArbitrumContext
+
 fun <T> withWeb3Context(
     web3j: Web3j,
     constants: BlockchainConstants,
@@ -109,9 +112,13 @@ fun <T> withWeb3Context(
     gasPrice: BigInteger = web3j.ethGasPrice().send().gasPrice,
     gasLimit: BigInteger = BigInteger("400000"),
     function: Web3Context.() -> T
-): T = UnknownWeb3Context(web3j, Web3Defaults(credentials,
-    StaticGasProvider(gasPrice, gasLimit)
-), constants).let(function)
+): T = UnknownWeb3Context(
+    web3j, Web3Defaults(
+        credentials,
+        StaticGasProvider(gasPrice, gasLimit)
+    ), constants
+).let(function)
+
 fun <T, K : Web3Context> withWeb3Context(
     web3Node: Web3Node<K>,
     credentials: Credentials,
@@ -120,7 +127,7 @@ fun <T, K : Web3Context> withWeb3Context(
     function: K.() -> T
 ): T {
     val web3j = createWeb3(web3Node.url, httpClient)
-    val context = if(gas.price == BigInteger.ZERO) {
+    val context = if (gas.price == BigInteger.ZERO) {
         web3Node.buildContext(web3j, credentials)
     } else {
         web3Node.buildContext(web3j, credentials, constantsForChain(web3Node.chain), gas.price, gas.limits)
@@ -135,7 +142,13 @@ fun <T, K : Web3Context> withWeb3Context(
     gasLimit: BigInteger = BigInteger("600000"),
     httpClient: OkHttpClient = fastPaceHttp,
     function: K.() -> T
-): T = withWeb3Context(web3Node, loadCredentials(account, resolveWallet()), Gas(gasPrice ?: constantsForChain(web3Node.chain).minGasPrice, gasLimit), httpClient, function)
+): T = withWeb3Context(
+    web3Node,
+    loadCredentials(account, resolveWallet()),
+    Gas(gasPrice ?: constantsForChain(web3Node.chain).minGasPrice, gasLimit),
+    httpClient,
+    function
+)
 
 fun <T, K : Web3Context> withReadonlyWeb3Context(
     web3Node: Web3Node<K>,
@@ -162,15 +175,19 @@ private fun loadCredentials(account: WalletAccount, wallet: String = resolveWall
         WalletAccount.readonly -> {
             Credentials.create("0x00000000")
         }
+
         WalletAccount.hardhat -> {
             Credentials.create("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80")
         }
+
         WalletAccount.hardhat2 -> {
             Credentials.create("0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d")
         }
+
         WalletAccount.hardhat3 -> {
             Credentials.create("0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a")
         }
+
         else -> {
             WalletUtils.loadBip39Credentials(null, wallet)
             val masterKeypair = Bip32ECKeyPair.generateKeyPair(MnemonicUtils.generateSeed(wallet, null))

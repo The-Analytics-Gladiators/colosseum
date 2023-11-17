@@ -32,30 +32,35 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
             chain = Chain.ETH,
             nativeTokenWrapper = Address("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
         )
+
         Chain.BSC -> BlockchainConstants(
             blockDuration = 3.seconds,
             minGasPrice = BigInteger("3000000000"),
             chain = Chain.BSC,
             nativeTokenWrapper = BnbTokens.Wbnb.address
         )
+
         Chain.POLYGON -> BlockchainConstants(
             blockDuration = 2.seconds,
             minGasPrice = BigInteger("210000000000"),
             chain = Chain.POLYGON,
             nativeTokenWrapper = MaticTokens.Wmatic.address
         )
+
         Chain.OPTIMISM -> BlockchainConstants(
             blockDuration = 2.seconds,
             minGasPrice = Convert.toWei("0.011", Convert.Unit.GWEI).toBigInteger(),
             chain = Chain.OPTIMISM,
             nativeTokenWrapper = Address("0x4200000000000000000000000000000000000042")
         )
+
         Chain.ARBITRUM_ONE -> BlockchainConstants(
             blockDuration = 0.3.seconds,
             minGasPrice = Convert.toWei("0.3", Convert.Unit.GWEI).toBigInteger(),
             chain = Chain.ARBITRUM_ONE,
             nativeTokenWrapper = Address("0x912CE59144191C1204E64559FE8253a0e49E6548")
         )
+
         Chain.HARDHAT -> BlockchainConstants(
             blockDuration = 1.seconds,
             minGasPrice = BigInteger("1000000000"),
