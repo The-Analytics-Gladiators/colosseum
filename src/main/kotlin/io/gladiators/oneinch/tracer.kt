@@ -114,7 +114,7 @@ private fun resolveToken(): String = try {
     System.getenv("ONE_INCH_TOKEN") ?: object {}.javaClass.getResourceAsStream("/one-inch-token.secret")!!
         .bufferedReader().readText().trim()
 } catch (ex: NullPointerException) {
-    throw IllegalArgumentException("Token file not found")
+    throw IllegalArgumentException("Token file not found", ex)
 }
 
 private fun defaultHttpClient(apiKey: String): HttpClient = HttpClient(CIO) {
