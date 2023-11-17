@@ -8,7 +8,7 @@ object Web3NodesRepo {
     data class JsonWeb3Node(val name: String, val chain: String, val url: String)
 
     private val nodes by lazy {
-        (System.getenv()["WEB3_NODES"]
+        (System.getenv("WEB3_NODES")
             ?: object {}.javaClass.getResourceAsStream("/web3-nodes.json")?.reader()?.readText()
             ?: object {}.javaClass.getResourceAsStream("/web3-nodes.json.secret")!!.reader().readText())
             .let { Json.decodeFromString<List<JsonWeb3Node>>(it) }
