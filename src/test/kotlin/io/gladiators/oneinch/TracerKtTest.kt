@@ -10,6 +10,7 @@ import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldNotBe
 import io.kotest.property.forAll
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
@@ -20,7 +21,7 @@ class TracerKtTest : FunSpec({
     val rateLimiterRegistry = RateLimiterRegistry {
         withRateLimiterConfig {
             limitForPeriod(1)
-            limitRefreshPeriod(1.4.seconds.toJavaDuration())
+            limitRefreshPeriod(1300.milliseconds.toJavaDuration())
             timeoutDuration(5.seconds.toJavaDuration())
         }
     }
