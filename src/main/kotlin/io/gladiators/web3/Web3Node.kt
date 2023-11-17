@@ -10,12 +10,15 @@ import org.web3j.utils.Async
 import java.math.BigInteger
 
 
-interface Web3Node<T: Web3Context> {
+interface Web3Node<T : Web3Context> {
     val name: String
     val url: String
     val chain: Chain
-    fun buildContext(web3j: Web3j, credentials: Credentials, constants: BlockchainConstants = constantsForChain(chain),
-                     gasPrice: BigInteger = constants.minGasPrice, gasLimit: BigInteger = BigInteger("3000000")): T
+    fun buildContext(
+        web3j: Web3j, credentials: Credentials, constants: BlockchainConstants = constantsForChain(chain),
+        gasPrice: BigInteger = constants.minGasPrice, gasLimit: BigInteger = BigInteger("3000000")
+    ): T
+
     companion object {
         fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L): Web3j =
             if (url.startsWith("http")) {
@@ -27,7 +30,9 @@ interface Web3Node<T: Web3Context> {
             }
     }
 }
-data class EthNode(override val name: String, override val url: String, override val chain: Chain = Chain.ETH): Web3Node<EthereumContext> {
+
+data class EthNode(override val name: String, override val url: String, override val chain: Chain = Chain.ETH) :
+    Web3Node<EthereumContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -35,9 +40,13 @@ data class EthNode(override val name: String, override val url: String, override
         gasPrice: BigInteger,
         gasLimit: BigInteger,
     ): EthereumContext = ETHContextContainer(
-            web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+        web3j,
+        Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit))
+    )
 }
-data class BinanceNode(override val name: String, override val url: String, override val chain: Chain = Chain.BSC): Web3Node<BinanceContext> {
+
+data class BinanceNode(override val name: String, override val url: String, override val chain: Chain = Chain.BSC) :
+    Web3Node<BinanceContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -45,10 +54,13 @@ data class BinanceNode(override val name: String, override val url: String, over
         gasPrice: BigInteger,
         gasLimit: BigInteger,
     ): BinanceContext = BinanceContextContainer(
-            web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+        web3j,
+        Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit))
+    )
 }
 
-data class PolygonNode(override val name: String, override val url: String, override val chain: Chain = Chain.POLYGON): Web3Node<PolygonContext> {
+data class PolygonNode(override val name: String, override val url: String, override val chain: Chain = Chain.POLYGON) :
+    Web3Node<PolygonContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -56,10 +68,16 @@ data class PolygonNode(override val name: String, override val url: String, over
         gasPrice: BigInteger,
         gasLimit: BigInteger,
     ): PolygonContext = PolygonContextContainer(
-            web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+        web3j,
+        Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit))
+    )
 }
 
-data class OptimismNode(override val name: String, override val url: String, override val chain: Chain = Chain.OPTIMISM): Web3Node<OptimismContext> {
+data class OptimismNode(
+    override val name: String,
+    override val url: String,
+    override val chain: Chain = Chain.OPTIMISM
+) : Web3Node<OptimismContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -67,10 +85,16 @@ data class OptimismNode(override val name: String, override val url: String, ove
         gasPrice: BigInteger,
         gasLimit: BigInteger,
     ): OptimismContext = OptimismContextContainer(
-        web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+        web3j,
+        Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit))
+    )
 }
 
-data class ArbitrumNode(override val name: String, override val url: String, override val chain: Chain = Chain.ARBITRUM_ONE): Web3Node<ArbitrumContext> {
+data class ArbitrumNode(
+    override val name: String,
+    override val url: String,
+    override val chain: Chain = Chain.ARBITRUM_ONE
+) : Web3Node<ArbitrumContext> {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,
@@ -78,9 +102,12 @@ data class ArbitrumNode(override val name: String, override val url: String, ove
         gasPrice: BigInteger,
         gasLimit: BigInteger,
     ): ArbitrumContext = ArbitrumContextContainer(
-        web3j, Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit)))
+        web3j,
+        Web3Defaults(credentials, StaticEIP1559GasProvider(constants.chain.id.toLong(), gasPrice, gasPrice, gasLimit))
+    )
 }
-data class HardhatNode<out K: Web3Node<T>, T: Web3Context>(val delegate: K): Web3Node<T> by delegate {
+
+data class HardhatNode<out K : Web3Node<T>, T : Web3Context>(val delegate: K) : Web3Node<T> by delegate {
     override fun buildContext(
         web3j: Web3j,
         credentials: Credentials,

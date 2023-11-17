@@ -34,5 +34,6 @@ jobs:
         run: ./gradlew release
         env:
           WEB3_NODES: ${{ secrets.WEB3_NODES }}
+          ONE_INCH_TOKEN: ${{ secrets.ONE_INCH_TOKEN }}
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}

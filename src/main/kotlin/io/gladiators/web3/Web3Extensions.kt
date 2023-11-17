@@ -17,7 +17,7 @@ import org.web3j.utils.Numeric
 import java.math.BigInteger
 import kotlin.time.measureTime
 
-private val logger = KotlinLogging.logger {  }
+private val logger = KotlinLogging.logger { }
 fun org.web3j.protocol.websocket.events.Log.toCoreLog(): Log =
     Log(
         false,
@@ -48,6 +48,7 @@ fun Web3Context.loadTransactionReceipt(transactionHash: String): TransactionRece
     val transactionReceipt: EthGetTransactionReceipt = web3j.ethGetTransactionReceipt(transactionHash).send()
     return transactionReceipt.transactionReceipt.orElse(null)
 }
+
 suspend fun Web3Context.waitForReceipt(txHash: String, maxBlocks: Int = 3): TransactionReceipt? =
     (1..maxBlocks).firstNotNullOfOrNull {
         val receipt = loadTransactionReceipt(txHash)
@@ -56,6 +57,7 @@ suspend fun Web3Context.waitForReceipt(txHash: String, maxBlocks: Int = 3): Tran
         }
         receipt
     }
+
 fun Web3Context.isNodeLagging(latestBlockEtherscan: BigInteger, allowedLag: Int): BigInteger? {
     return try {
         val latestBlockNumber = web3j.ethBlockNumber().send().blockNumber
@@ -93,13 +95,15 @@ fun Web3j.ping(iterations: Int = 2): kotlin.time.Duration {
         }
     }.reduce { one, another -> one.plus(another) } / iterations
 }
+
 fun Web3Context.sendFunds(
     amount: BigInteger,
     recipient: String,
     gasPrice: BigInteger,
     nonce: BigInteger,
     gasLimit: BigInteger = 80000.toBigInteger(),
-): EthSendTransaction = web3j.ethSendRawTransaction(sign(sendFundsTx(amount, recipient, gasPrice, nonce, gasLimit))).send()
+): EthSendTransaction =
+    web3j.ethSendRawTransaction(sign(sendFundsTx(amount, recipient, gasPrice, nonce, gasLimit))).send()
 
 fun Web3Context.sendFundsTx(
     amount: BigInteger,
@@ -118,6 +122,7 @@ fun Web3Context.sendFundsTx(
         "",
         emptyList()
     )
+
 fun Web3Context.approveTokens(
     spender: String,
     tokens: List<String>,
