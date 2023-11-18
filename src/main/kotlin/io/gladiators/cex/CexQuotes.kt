@@ -105,7 +105,7 @@ fun Web3Context.tokenToUSD(
     token: String, amountWei: BigInteger, mathContext: MathContext = MathContext(15)
 ): BigDecimal {
     val tokenPrice = usdForOneToken(token)
-    val weiCount = BigInteger.valueOf(10).pow(decimalsForToken(erc20(Address(token))))
+    val weiCount = BigInteger.valueOf(10).pow(decimalsForToken(token))
     return amountWei.toBigDecimal().multiply(tokenPrice.toBigDecimal()).divide(weiCount.toBigDecimal(), mathContext)
 }
 
@@ -122,8 +122,12 @@ fun tokenToUSD(
 fun Web3Context.bnbToUsd(amountWei: BigInteger): BigDecimal =
     tokenToUSD(erc20(BnbTokens.Wbnb.address), amountWei, chainToGeckoName(this))
 
-private fun decimalsForToken(token: Erc20): Int = decimalsCache.get(token.contractAddress) {
+private fun Web3Context.decimalsForToken(token: String): Int = decimalsCache.get(token) { decimalsForTokenWithoutCache(erc20(token)) }
+
+private fun decimalsForToken(token: Erc20): Int = decimalsCache.get(token.contractAddress) { decimalsForTokenWithoutCache(token) }
+
+private fun decimalsForTokenWithoutCache(token: Erc20): Int {
     val decimals = token.decimals().send()
     require(decimals < Int.MAX_VALUE.toBigInteger() && decimals > Int.MIN_VALUE.toBigInteger())
-    decimals.toInt()
+    return decimals.toInt()
 }
