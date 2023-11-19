@@ -37,14 +37,14 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
             blockDuration = 3.seconds,
             minGasPrice = BigInteger("3000000000"),
             chain = Chain.BSC,
-            nativeTokenWrapper = BnbTokens.Wbnb.address
+            nativeTokenWrapper = BnbTokens.WBNB.address
         )
 
         Chain.POLYGON -> BlockchainConstants(
             blockDuration = 2.seconds,
             minGasPrice = BigInteger("210000000000"),
             chain = Chain.POLYGON,
-            nativeTokenWrapper = MaticTokens.Wmatic.address
+            nativeTokenWrapper = MaticTokens.WMATIC.address
         )
 
         Chain.OPTIMISM -> BlockchainConstants(
@@ -65,6 +65,6 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
             blockDuration = 1.seconds,
             minGasPrice = BigInteger("1000000000"),
             chain = Chain.HARDHAT,
-            nativeTokenWrapper = BnbTokens.Wbnb.address
+            nativeTokenWrapper = BnbTokens.WBNB.address
         )
     }

@@ -123,7 +123,7 @@ fun tokenToUSD(
 }
 
 fun Web3Context.bnbToUsd(amountWei: BigInteger): BigDecimal =
-    tokenToUSD(erc20(BnbTokens.Wbnb.address), amountWei, chainToGeckoName(this))
+    tokenToUSD(erc20(BnbTokens.WBNB.address), amountWei, chainToGeckoName(this))
 
 private fun Web3Context.decimalsForToken(token: String): Int = decimalsCache.get(token) { decimalsForTokenWithoutCache(erc20(token)) }
 

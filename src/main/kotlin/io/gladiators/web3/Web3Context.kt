@@ -110,7 +110,7 @@ fun <T> withWeb3Context(
     account: WalletAccount = WalletAccount.primary,
     credentials: Credentials = loadCredentials(account),
     gasPrice: BigInteger = web3j.ethGasPrice().send().gasPrice,
-    gasLimit: BigInteger = BigInteger("400000"),
+    gasLimit: BigInteger = BigInteger("1000000"),
     function: Web3Context.() -> T
 ): T = UnknownWeb3Context(
     web3j, Web3Defaults(
@@ -139,7 +139,7 @@ fun <T, K : Web3Context> withWeb3Context(
     web3Node: Web3Node<K>,
     account: WalletAccount = WalletAccount.primary,
     gasPrice: BigInteger? = null, // sets automatically
-    gasLimit: BigInteger = BigInteger("600000"),
+    gasLimit: BigInteger = BigInteger("1000000"),
     httpClient: OkHttpClient = fastPaceHttp,
     function: K.() -> T
 ): T = withWeb3Context(
@@ -173,7 +173,7 @@ fun resolveWallet(file: String = "/secrets/metamask.secret"): String = try {
 private fun loadCredentials(account: WalletAccount, wallet: String = resolveWallet()): Credentials {
     return when (account) {
         WalletAccount.readonly -> {
-            Credentials.create("0x00000000")
+            Credentials.create("0x0")
         }
 
         WalletAccount.hardhat -> {

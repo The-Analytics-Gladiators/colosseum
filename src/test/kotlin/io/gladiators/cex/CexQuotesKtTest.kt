@@ -15,8 +15,8 @@ import java.math.RoundingMode
 class CexQuotesKtTest : FunSpec({
 
     withData(
-        1000 to BnbTokens.Cake,
-        3000 to BnbTokens.Weth
+        1000 to BnbTokens.CAKE,
+        3000 to BnbTokens.WETH
     ) { (fiat, tokenAddr) ->
         withReadonlyWeb3Context(Web3NodesRepo.binance("BlastApi")) {
             val oneWay = usdToToken(tokenAddr.address.value, fiat.toBigDecimal())
@@ -27,10 +27,10 @@ class CexQuotesKtTest : FunSpec({
 
     test("other methods") {
         withReadonlyWeb3Context(Web3NodesRepo.binance("BlastApi")) {
-            usdToToken(BnbTokens.Wbnb.address.value, bnbToUsd(1000.toBigInteger())).toInt() shouldBe 1000
+            usdToToken(BnbTokens.WBNB.address.value, bnbToUsd(1000.toBigInteger())).toInt() shouldBe 1000
             val bnbInEth =
-                tokenToToken(erc20(BnbTokens.Wbnb.address), 10000000.toBigInteger(), erc20(BnbTokens.Weth.address))
-            val andBack = tokenToToken(erc20(BnbTokens.Weth.address), bnbInEth, erc20(BnbTokens.Wbnb.address)).toInt()
+                tokenToToken(erc20(BnbTokens.WBNB.address), 10000000.toBigInteger(), erc20(BnbTokens.WETH.address))
+            val andBack = tokenToToken(erc20(BnbTokens.WETH.address), bnbInEth, erc20(BnbTokens.WBNB.address)).toInt()
             andBack shouldBeGreaterThan 10000000 - 10
             andBack shouldBeLessThan 10000000 + 10
         }
@@ -38,16 +38,16 @@ class CexQuotesKtTest : FunSpec({
     test("other chains") {
         withReadonlyWeb3Context(Web3NodesRepo.polygon("Quicknode")) {
             usdToToken(
-                MaticTokens.Wmatic.address.value,
-                tokenToUSD(MaticTokens.Wmatic.address.value, 1000.toBigInteger())
+                MaticTokens.WMATIC.address.value,
+                tokenToUSD(MaticTokens.WMATIC.address.value, 1000.toBigInteger())
             ).toInt() shouldBe 1000
             val maticInEth = tokenToToken(
-                erc20(MaticTokens.Wmatic.address),
+                erc20(MaticTokens.WMATIC.address),
                 10000000.toBigInteger(),
-                erc20(MaticTokens.Weth.address)
+                erc20(MaticTokens.WETH.address)
             )
             val andBack =
-                tokenToToken(erc20(MaticTokens.Weth.address), maticInEth, erc20(MaticTokens.Wmatic.address)).toInt()
+                tokenToToken(erc20(MaticTokens.WETH.address), maticInEth, erc20(MaticTokens.WMATIC.address)).toInt()
             andBack shouldBeGreaterThan (10000000 - (10000000 * 0.001)).toInt()
             andBack shouldBeLessThan (10000000 + (10000000 * 0.001)).toInt()
         }
