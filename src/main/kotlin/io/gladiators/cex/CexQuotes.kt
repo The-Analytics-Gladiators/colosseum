@@ -91,11 +91,14 @@ fun Web3Context.tokenToToken(from: Erc20, amountWei: BigInteger, to: Erc20): Big
 }
 
 fun Web3Context.usdToToken(token: String, amountWei: BigDecimal): BigInteger =
-    usdToToken(erc20(Address(token)), amountWei, chainToGeckoName(this))
+    usdToToken(amountWei, usdForOneToken(token), decimalsForToken(token))
 
 fun usdToToken( to: Erc20, amountWei: BigDecimal, chain: String): BigInteger {
-    val tokenPrice = usdForOneToken(to, chain)
-    val weiInOneToken = BigInteger.valueOf(10).pow(decimalsForToken(to)).toBigDecimal()
+    return usdToToken(amountWei, usdForOneToken(to, chain), decimalsForToken(to))
+}
+
+private fun usdToToken(amountWei: BigDecimal, tokenPrice: Double, decimals: Int):BigInteger {
+    val weiInOneToken = BigInteger.valueOf(10).pow(decimals).toBigDecimal()
     return weiInOneToken.multiply(amountWei).divide(tokenPrice.toBigDecimal(), MathContext(15))
         .setScale(0, RoundingMode.FLOOR)
         .toBigInteger()
