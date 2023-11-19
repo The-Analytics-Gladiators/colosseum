@@ -157,7 +157,7 @@ fun <T, K : Web3Context> withReadonlyWeb3Context(
 ): T {
     return withWeb3Context(
         web3Node = web3Node,
-        credentials = loadCredentials(WalletAccount.readonly, ""),
+        credentials = loadCredentials(WalletAccount.readonly),
         httpClient = httpClient,
         function = function
     )
@@ -170,7 +170,7 @@ fun resolveWallet(file: String = "/secrets/metamask.secret"): String = try {
 }
 
 
-private fun loadCredentials(account: WalletAccount, wallet: String = resolveWallet()): Credentials {
+private fun loadCredentials(account: WalletAccount): Credentials {
     return when (account) {
         WalletAccount.readonly -> {
             Credentials.create("0x0")
@@ -188,20 +188,20 @@ private fun loadCredentials(account: WalletAccount, wallet: String = resolveWall
             Credentials.create("0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a")
         }
 
-        else -> {
-            WalletUtils.loadBip39Credentials(null, wallet)
-            val masterKeypair = Bip32ECKeyPair.generateKeyPair(MnemonicUtils.generateSeed(wallet, null))
-            val path = arrayOf(
-                44.or(Bip32ECKeyPair.HARDENED_BIT),
-                60.or(Bip32ECKeyPair.HARDENED_BIT),
-                0.or(Bip32ECKeyPair.HARDENED_BIT),
-                0,
-                account.accountSeed
-            )
-            val x = Bip32ECKeyPair.deriveKeyPair(masterKeypair, path.toIntArray())
-            Credentials.create(x)
-        }
+        else -> loadCredentials(account, resolveWallet())
     }
-
 }
 
+private fun loadCredentials(account: WalletAccount, wallet: String): Credentials {
+    WalletUtils.loadBip39Credentials(null, wallet)
+    val masterKeypair = Bip32ECKeyPair.generateKeyPair(MnemonicUtils.generateSeed(wallet, null))
+    val path = arrayOf(
+        44.or(Bip32ECKeyPair.HARDENED_BIT),
+        60.or(Bip32ECKeyPair.HARDENED_BIT),
+        0.or(Bip32ECKeyPair.HARDENED_BIT),
+        0,
+        account.accountSeed
+    )
+    val x = Bip32ECKeyPair.deriveKeyPair(masterKeypair, path.toIntArray())
+    return Credentials.create(x)
+}
