@@ -29,7 +29,7 @@ dependencies {
     api("com.esaulpaugh:headlong:9.4.0")
     api("com.github.goodforgod:java-etherscan-api:2.1.0")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    api("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")

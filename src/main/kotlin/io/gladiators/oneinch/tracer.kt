@@ -57,7 +57,7 @@ data class TransactionTrace(
 )
 
 enum class CallStatus {
-    RETURNED, REVERTED, STOPPED
+    RETURNED, REVERTED, STOPPED, NO_CONTRACT
 }
 
 @Serializable

@@ -144,7 +144,7 @@ fun <T, K : Web3Context> withWeb3Context(
     function: K.() -> T
 ): T = withWeb3Context(
     web3Node,
-    loadCredentials(account, resolveWallet()),
+    loadCredentials(account),
     Gas(gasPrice ?: constantsForChain(web3Node.chain).minGasPrice, gasLimit),
     httpClient,
     function
