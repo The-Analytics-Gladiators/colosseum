@@ -97,7 +97,7 @@ fun usdToToken( to: Erc20, amountWei: BigDecimal, chain: String): BigInteger {
     return usdToToken(amountWei, usdForOneToken(to, chain), decimalsForToken(to))
 }
 
-private fun usdToToken(amountWei: BigDecimal, tokenPrice: Double, decimals: Int):BigInteger {
+fun usdToToken(amountWei: BigDecimal, tokenPrice: Double, decimals: Int):BigInteger {
     val weiInOneToken = BigInteger.valueOf(10).pow(decimals).toBigDecimal()
     return weiInOneToken.multiply(amountWei).divide(tokenPrice.toBigDecimal(), MathContext(15))
         .setScale(0, RoundingMode.FLOOR)
@@ -107,8 +107,11 @@ private fun usdToToken(amountWei: BigDecimal, tokenPrice: Double, decimals: Int)
 fun Web3Context.tokenToUSD(
     token: String, amountWei: BigInteger, mathContext: MathContext = MathContext(15)
 ): BigDecimal {
-    val tokenPrice = usdForOneToken(token)
-    val weiCount = BigInteger.valueOf(10).pow(decimalsForToken(token))
+    return tokenToUSD(amountWei, usdForOneToken(token), decimalsForToken(token), mathContext)
+}
+
+fun tokenToUSD(amountWei: BigInteger, tokenPrice: Double, decimals: Int, mathContext: MathContext = MathContext(15)): BigDecimal {
+    val weiCount = BigInteger.valueOf(10).pow(decimals)
     return amountWei.toBigDecimal().multiply(tokenPrice.toBigDecimal()).divide(weiCount.toBigDecimal(), mathContext)
 }
 
@@ -125,9 +128,9 @@ fun tokenToUSD(
 fun Web3Context.bnbToUsd(amountWei: BigInteger): BigDecimal =
     tokenToUSD(erc20(BnbTokens.WBNB.address), amountWei, chainToGeckoName(this))
 
-private fun Web3Context.decimalsForToken(token: String): Int = decimalsCache.get(token) { decimalsForTokenWithoutCache(erc20(token)) }
+fun Web3Context.decimalsForToken(token: String): Int = decimalsCache.get(token) { decimalsForTokenWithoutCache(erc20(token)) }
 
-private fun decimalsForToken(token: Erc20): Int = decimalsCache.get(token.contractAddress) { decimalsForTokenWithoutCache(token) }
+fun decimalsForToken(token: Erc20): Int = decimalsCache.get(token.contractAddress) { decimalsForTokenWithoutCache(token) }
 
 private fun decimalsForTokenWithoutCache(token: Erc20): Int {
     val decimals = token.decimals().send()
