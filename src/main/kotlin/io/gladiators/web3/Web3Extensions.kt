@@ -8,7 +8,6 @@ import org.web3j.crypto.RawTransaction
 import org.web3j.crypto.TransactionEncoder
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
-import org.web3j.protocol.core.methods.request.EthFilter
 import org.web3j.protocol.core.methods.response.*
 import org.web3j.protocol.http.HttpService
 import org.web3j.protocol.websocket.WebSocketService
@@ -58,22 +57,17 @@ suspend fun Web3Context.waitForReceipt(txHash: String, maxBlocks: Int = 3): Tran
         receipt
     }
 
-fun Web3Context.isNodeLagging(latestBlockEtherscan: BigInteger, allowedLag: Int): BigInteger? {
+fun Web3Context.isNodeLagging(latestBlockEtherscan: BigInteger, maxDiff: Int): Boolean {
     return try {
         val latestBlockNumber = web3j.ethBlockNumber().send().blockNumber
         // smoketest
         val latestBlockObj = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send()
         val diff = latestBlockEtherscan - latestBlockNumber
         val isSyncing = web3j.ethSyncing().send().isSyncing
-        val lastBlockLogs = web3j.ethGetLogs(EthFilter(latestBlockObj.block.hash)).send().logs
-        if (lastBlockLogs == null || diff > allowedLag.toBigInteger() || lastBlockLogs.isEmpty() || isSyncing) {
-            null
-        } else {
-            latestBlockNumber
-        }
+        diff > maxDiff.toBigInteger() || latestBlockObj == null || latestBlockObj.hasError() || isSyncing
     } catch (ex: Exception) {
         logger.debug(ex) { "Node $web3j is not available $ex" }
-        null
+        true
     }
 }
 
