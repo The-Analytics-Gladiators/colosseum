@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import net.researchgate.release.ReleaseExtension
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.20"
     kotlin("plugin.serialization") version "1.9.20"
-    id("com.github.ben-manes.versions") version "0.47.0"
-    id("io.gitlab.arturbosch.detekt").version("1.23.3")
+    id("com.github.ben-manes.versions") version "0.50.0"
+    id("io.gitlab.arturbosch.detekt").version("1.23.4")
     id("net.researchgate.release").version("3.0.2")
     `maven-publish`
 }
@@ -19,14 +19,13 @@ repositories {
 }
 
 val ktorVersion = "2.3.6"
-val resilience4jVersion = "2.1.0"
+val resilience4jVersion = "2.2.0"
 
 dependencies {
     api("org.web3j:core:4.10.3")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
-    api("com.esaulpaugh:headlong:9.4.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.2")
+    api("com.esaulpaugh:headlong:10.0.2")
     api("com.github.goodforgod:java-etherscan-api:2.1.0")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
     api("io.ktor:ktor-client-core:$ktorVersion")

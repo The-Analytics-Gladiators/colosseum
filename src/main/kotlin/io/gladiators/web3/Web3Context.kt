@@ -44,7 +44,7 @@ private val slowPaceHttp: OkHttpClient by lazy {
         .build()
 }
 
-data class Gas(val price: BigInteger, val limits: BigInteger = BigInteger("3000000"))
+data class Gas(val price: BigInteger, val limit: BigInteger = BigInteger("3000000"))
 
 data class Web3Defaults(val credentials: Credentials, val gasProvider: ContractGasProvider)
 
@@ -130,7 +130,7 @@ fun <T, K : Web3Context> withWeb3Context(
     val context = if (gas.price == BigInteger.ZERO) {
         web3Node.buildContext(web3j, credentials)
     } else {
-        web3Node.buildContext(web3j, credentials, constantsForChain(web3Node.chain), gas.price, gas.limits)
+        web3Node.buildContext(web3j, credentials, constantsForChain(web3Node.chain), gas.price, gas.limit)
     }
     return context.let(function)
 }
