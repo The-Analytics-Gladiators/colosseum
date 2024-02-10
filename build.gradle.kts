@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import net.researchgate.release.ReleaseExtension
 
 plugins {
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.serialization") version "1.9.20"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.21"
     id("com.github.ben-manes.versions") version "0.50.0"
-    id("io.gitlab.arturbosch.detekt").version("1.23.4")
+    id("io.gitlab.arturbosch.detekt").version("1.23.5")
     id("net.researchgate.release").version("3.0.2")
     `maven-publish`
 }
@@ -37,7 +37,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.2")
-    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    implementation("io.github.oshai:kotlin-logging-jvm:6.0.3")
 
     testImplementation(kotlin("test"))
     testImplementation("io.github.resilience4j:resilience4j-kotlin:${resilience4jVersion}")
