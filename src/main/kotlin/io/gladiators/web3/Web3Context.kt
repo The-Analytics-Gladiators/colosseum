@@ -132,7 +132,11 @@ fun <T, K : Web3Context> withWeb3Context(
     } else {
         web3Node.buildContext(web3j, credentials, constantsForChain(web3Node.chain), gas.price, gas.limit)
     }
-    return context.let(function)
+    try {
+        return context.let(function)
+    } finally {
+       context.web3j.shutdown()
+    }
 }
 
 fun <T, K : Web3Context> withWeb3Context(
@@ -202,6 +206,5 @@ private fun loadCredentials(account: WalletAccount, wallet: String): Credentials
         0,
         account.accountSeed
     )
-    val x = Bip32ECKeyPair.deriveKeyPair(masterKeypair, path.toIntArray())
-    return Credentials.create(x)
+    return Credentials.create(Bip32ECKeyPair.deriveKeyPair(masterKeypair, path.toIntArray()))
 }
