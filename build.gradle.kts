@@ -50,7 +50,6 @@ dependencies {
 }
 
 val sourceJar by tasks.registering(Jar::class) {
-    // Include Kotlin sources
     from(sourceSets["main"].kotlin)
 
 }
