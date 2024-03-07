@@ -8,6 +8,8 @@ import org.web3j.protocol.websocket.WebSocketService
 import org.web3j.tx.gas.StaticEIP1559GasProvider
 import org.web3j.utils.Async
 import java.math.BigInteger
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 
 
 interface Web3Node<T : Web3Context> {
@@ -20,9 +22,19 @@ interface Web3Node<T : Web3Context> {
     ): T
 
     companion object {
-        fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L): Web3j =
+
+        private fun daemonPool(count: Int = Runtime.getRuntime().availableProcessors()): ScheduledExecutorService {
+            return Executors.newScheduledThreadPool(count) { runnable ->
+                val thread = Thread(runnable)
+                thread.isDaemon = true
+                thread
+            }
+        }
+
+        val defaultPool = daemonPool()
+        fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L, asyncPool: ScheduledExecutorService = defaultPool): Web3j =
             if (url.startsWith("http")) {
-                Web3j.build(HttpService(url, httpClient), pollingInterval, Async.defaultExecutorService())
+                Web3j.build(HttpService(url, httpClient), pollingInterval, asyncPool)
             } else {
                 val webSocketService = WebSocketService(url, false)
                 webSocketService.connect()
