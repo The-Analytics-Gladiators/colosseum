@@ -41,6 +41,7 @@ private val slowPaceHttp: OkHttpClient by lazy {
         .connectTimeout(java.time.Duration.ofSeconds(1))
         .readTimeout(java.time.Duration.ofSeconds(40))
         .writeTimeout(java.time.Duration.ofSeconds(1))
+        .connectionPool(ConnectionPool(10, 60L, TimeUnit.SECONDS))
         .build()
 }
 
@@ -135,7 +136,8 @@ fun <T, K : Web3Context> withWeb3Context(
     try {
         return context.let(function)
     } finally {
-       context.web3j.shutdown()
+        httpClient.connectionPool.evictAll()
+        context.web3j.shutdown()
     }
 }
 

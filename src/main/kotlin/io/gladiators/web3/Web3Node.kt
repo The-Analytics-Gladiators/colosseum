@@ -30,9 +30,7 @@ interface Web3Node<T : Web3Context> {
                 thread
             }
         }
-
-        val defaultPool = daemonPool()
-        fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L, asyncPool: ScheduledExecutorService = defaultPool): Web3j =
+        fun createWeb3(url: String, httpClient: OkHttpClient, pollingInterval: Long = 3000L, asyncPool: ScheduledExecutorService = daemonPool()): Web3j =
             if (url.startsWith("http")) {
                 Web3j.build(HttpService(url, httpClient), pollingInterval, asyncPool)
             } else {
