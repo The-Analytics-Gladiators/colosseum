@@ -28,21 +28,21 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
     when (chain) {
         Chain.ETH -> BlockchainConstants(
             blockDuration = 14.seconds,
-            minGasPrice = constantsForChain(Chain.ETH).minGasPrice,
+            minGasPrice = BigInteger("3000000000"),
             chain = Chain.ETH,
             nativeTokenWrapper = Address("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
         )
 
         Chain.BSC -> BlockchainConstants(
             blockDuration = 3.seconds,
-            minGasPrice = constantsForChain(Chain.BSC).minGasPrice,
+            minGasPrice = BigInteger("1000000000"),
             chain = Chain.BSC,
             nativeTokenWrapper = BnbTokens.WBNB.address
         )
 
         Chain.POLYGON -> BlockchainConstants(
             blockDuration = 2.seconds,
-            minGasPrice = constantsForChain(Chain.POLYGON).minGasPrice,
+            minGasPrice = BigInteger("210000000000"),
             chain = Chain.POLYGON,
             nativeTokenWrapper = MaticTokens.WMATIC.address
         )
