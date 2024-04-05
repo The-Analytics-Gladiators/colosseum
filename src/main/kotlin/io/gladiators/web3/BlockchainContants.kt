@@ -35,7 +35,7 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
 
         Chain.BSC -> BlockchainConstants(
             blockDuration = 3.seconds,
-            minGasPrice = BigInteger("3000000000"),
+            minGasPrice = BigInteger("1000000000"),
             chain = Chain.BSC,
             nativeTokenWrapper = BnbTokens.WBNB.address
         )
