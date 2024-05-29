@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import net.researchgate.release.ReleaseExtension
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("plugin.serialization") version "1.9.21"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
     id("com.github.ben-manes.versions") version "0.50.0"
-    id("io.gitlab.arturbosch.detekt").version("1.23.5")
+    id("io.gitlab.arturbosch.detekt").version("1.23.6")
     id("net.researchgate.release").version("3.0.2")
     `maven-publish`
 }
@@ -18,7 +18,7 @@ repositories {
     mavenLocal()
 }
 
-val ktorVersion = "2.3.6"
+val ktorVersion = "2.3.11"
 val resilience4jVersion = "2.2.0"
 
 dependencies {

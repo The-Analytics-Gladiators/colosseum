@@ -198,7 +198,7 @@ private fun getLiquidityForAmount1(
 ): BigInteger {
     var sqrtRatioAX96 = sqrtRatioAX96
     var sqrtRatioBX96 = sqrtRatioBX96
-    if (sqrtRatioAX96.compareTo(sqrtRatioBX96) > 0) {
+    if (sqrtRatioAX96 > sqrtRatioBX96) {
         val tmp = sqrtRatioAX96
         sqrtRatioAX96 = sqrtRatioBX96
         sqrtRatioBX96 = tmp

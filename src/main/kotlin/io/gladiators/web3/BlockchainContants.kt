@@ -2,12 +2,18 @@ package io.gladiators.web3
 
 import io.gladiators.chain.BnbTokens
 import io.gladiators.chain.MaticTokens
+import io.gladiators.serialization.AddressJson
+import io.gladiators.serialization.BigIntegerJson
+import io.gladiators.serialization.BigIntegerSerializer
+import kotlinx.serialization.Serializable
 import org.web3j.abi.datatypes.Address
 import org.web3j.utils.Convert
 import java.math.BigInteger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+
+@Serializable
 enum class Chain(val id: Int) {
     ETH(1),
     BSC(56),
@@ -17,11 +23,12 @@ enum class Chain(val id: Int) {
     HARDHAT(31337)
 }
 
+@Serializable
 data class BlockchainConstants(
     val blockDuration: Duration,
-    val minGasPrice: BigInteger,
+    val minGasPrice: BigIntegerJson,
     val chain: Chain,
-    val nativeTokenWrapper: Address
+    val nativeTokenWrapper: AddressJson
 )
 
 fun constantsForChain(chain: Chain): BlockchainConstants =

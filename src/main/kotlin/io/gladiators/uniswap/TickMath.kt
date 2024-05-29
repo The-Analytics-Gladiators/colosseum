@@ -91,8 +91,7 @@ object TickMath {
         val ratio = sqrtPriceX96.shiftLeft(32)
         var r = ratio
         var msb = BigInteger.ZERO
-        var f: BigInteger? = null
-        f = gt(r, BigInteger("ffffffffffffffffffffffffffffffff", 16)).shiftLeft(7)
+        var f: BigInteger = gt(r, BigInteger("ffffffffffffffffffffffffffffffff", 16)).shiftLeft(7)
         msb = msb.or(f)
         r = r.shiftRight(f.toInt())
         f = gt(r, BigInteger("ffffffffffffffff", 16)).shiftLeft(6)

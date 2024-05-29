@@ -60,7 +60,7 @@ fun <T> Web3Context.withinPoolV3(pool: String, function: UniswapPoolV3Context<We
     )
     require(poolV3.factory().send().equals(addressBook.uniswap().factory, ignoreCase = true)) { "This is not Uniswap pool $pool" }
     val call = multicall {
-        contract(poolV3)
+        this.contract(poolV3)
         call(poolV3.tickSpacing())
         call(poolV3.slot0())
         call(poolV3.liquidity())
@@ -322,7 +322,7 @@ fun UniswapPoolV3Context<out Web3Context>.loadMintedTokens(): List<TokenId> {
     val positionManager = web3Context.uniswapPositionManager()
     val currentTokensCount = positionManager.balanceOf(web3Context.web3Defaults.credentials.address).send().toInt()
     val result = web3Context.multicall {
-        contract(positionManager)
+        this.contract(positionManager)
         (0 until currentTokensCount).map {
             call(positionManager.tokenOfOwnerByIndex(web3Context.web3Defaults.credentials.address, it.toBigInteger()))
         }

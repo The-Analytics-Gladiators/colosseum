@@ -16,7 +16,6 @@ object SwapMath {
         val sqrtRatioNextX96: BigInteger
         var amountIn = BigInteger.ZERO
         var amountOut = BigInteger.ZERO
-        var feeAmount = BigInteger.ZERO
         if (exactIn) {
             val amountRemainingLessFee: BigInteger =
                 FullMath.mulDiv(amountRemaining, tenE6.subtract(BigInteger.valueOf(feePips.toLong())), tenE6)
@@ -87,7 +86,7 @@ object SwapMath {
         if (!exactIn && amountOut > uint256(amountRemaining.negate())) {
             amountOut = uint256(amountRemaining.negate())
         }
-        feeAmount = if (exactIn && sqrtRatioNextX96 !== sqrtRatioTargetX96) {
+        val feeAmount: BigInteger = if (exactIn && sqrtRatioNextX96 !== sqrtRatioTargetX96) {
             uint256(amountRemaining).subtract(amountIn)
         } else {
             FullMath.mulDivRoundingUp(
