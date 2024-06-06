@@ -35,7 +35,7 @@ fun constantsForChain(chain: Chain): BlockchainConstants =
     when (chain) {
         Chain.ETH -> BlockchainConstants(
             blockDuration = 14.seconds,
-            minGasPrice = BigInteger("3000000000"),
+            minGasPrice = BigInteger("10000000000"),
             chain = Chain.ETH,
             nativeTokenWrapper = Address("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
         )
