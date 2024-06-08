@@ -1,9 +1,11 @@
 package io.gladiators.web3
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.gladiators.chain.erc20
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
+import org.web3j.abi.datatypes.Address
 import org.web3j.crypto.RawTransaction
 import org.web3j.crypto.TransactionEncoder
 import org.web3j.protocol.Web3j
@@ -12,9 +14,13 @@ import org.web3j.protocol.core.methods.response.*
 import org.web3j.protocol.exceptions.ClientConnectionException
 import org.web3j.protocol.http.HttpService
 import org.web3j.protocol.websocket.WebSocketService
+import org.web3j.tx.response.PollingTransactionReceiptProcessor
 import org.web3j.utils.Async
 import org.web3j.utils.Numeric
+import java.io.File
 import java.math.BigInteger
+import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import kotlin.time.measureTime
 
 private val logger = KotlinLogging.logger { }
@@ -36,10 +42,10 @@ fun org.web3j.protocol.websocket.events.Log.toCoreLog(): Log =
 fun Web3Context.sign(tx: RawTransaction): String =
     Numeric.toHexString(TransactionEncoder.signMessage(tx, web3Defaults.credentials))
 
-fun Web3Context.primaryAddressNonce(): BigInteger {
+fun Web3Context.primaryAddressNonce(withPending: Boolean = true): BigInteger {
     val ethGetTransactionCount: EthGetTransactionCount = web3j.ethGetTransactionCount(
         web3Defaults.credentials.address,
-        DefaultBlockParameterName.PENDING
+        if(withPending) DefaultBlockParameterName.PENDING else DefaultBlockParameterName.ACCEPTED
     ).send()
     return ethGetTransactionCount.transactionCount
 }
@@ -129,3 +135,36 @@ fun Web3Context.approveTokens(
         ).send().isStatusOK
     }
 }
+
+
+/**
+ * Deploys hardhat compiled bytecode
+ */
+fun Web3Context.deployContract(file: File, waitBlocks: Int = 10): Address? {
+        logger.debug { "Deploying ${file.absolutePath}" }
+        val bytecodeStr = if(file.readText().contains("bytecode")) {
+            ObjectMapper().readTree(file.inputStream()).findValue("bytecode").asText()
+        } else {
+            file.readText()
+        }
+        val bytecode = bytecodeStr
+            .removePrefix("0x")
+            .replace("\n", "")
+            .trim()
+        val rawTransaction = RawTransaction.createContractTransaction(
+            primaryAddressNonce(),
+            web3Defaults.gasProvider.getGasPrice(""),
+            web3Defaults.gasProvider.getGasLimit(""),
+            BigInteger.ZERO,
+            bytecode
+        )
+        val tx = web3j.ethSendRawTransaction(sign(rawTransaction)).send()
+        val receiptProcessor = PollingTransactionReceiptProcessor(web3j, blockchainConstants.blockDuration.inWholeMilliseconds, waitBlocks)
+        val result = receiptProcessor.waitForTransactionReceipt(tx.transactionHash)
+        return if(!result.isStatusOK) {
+            logger.error { "Deployment err ${result.revertReason}" }
+            null
+        } else {
+            Address(result.contractAddress)
+        }
+    }
