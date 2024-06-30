@@ -198,7 +198,7 @@ private fun loadCredentials(account: WalletAccount): Credentials {
     }
 }
 
-private fun loadCredentials(account: WalletAccount, wallet: String): Credentials {
+fun loadCredentials(account: WalletAccount, wallet: String): Credentials {
     WalletUtils.loadBip39Credentials(null, wallet)
     val masterKeypair = Bip32ECKeyPair.generateKeyPair(MnemonicUtils.generateSeed(wallet, null))
     val path = arrayOf(
