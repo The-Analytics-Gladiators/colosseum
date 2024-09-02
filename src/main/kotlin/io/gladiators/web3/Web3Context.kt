@@ -20,6 +20,7 @@ value class WalletAccount(val accountSeed: Int) {
         val primary = WalletAccount(0)
         val secondary = WalletAccount(1)
         val canary = WalletAccount(2)
+        val bold = WalletAccount(3)
         val readonly = WalletAccount(-1)
         val hardhat = WalletAccount(-2)
         val hardhat2 = WalletAccount(-3)
