@@ -12,7 +12,8 @@ enum class BnbTokens(override val address: Address): ChainToken {
     USDT(Address("0x55d398326f99059fF775485246999027B3197955")),
     BTCB(Address("0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c")),
     WETH(Address("0x2170ed0880ac9a755fd29b2688956bd959f933f8")),
-    CAKE(Address("0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"))
+    CAKE(Address("0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82")),
+    USDC(Address("0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"))
 }
 
 enum class MaticTokens(override val address: Address): ChainToken {
